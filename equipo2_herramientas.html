@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Herramientas y Seguridad en Cocina</title>
+
+<!--
+  ============================================================
+  EQUIPO 2 - MÓDULO HERRAMIENTAS Y SEGURIDAD EN COCINA
+  (solo HTML y CSS)
+  ============================================================
+  CÓMO FUNCIONA (sin JavaScript):
+  - El catálogo muestra 4 tarjetas. Cada tarjeta es un enlace <a href="#id">.
+  - Al tocar una tarjeta, CSS muestra la pantalla con ese id usando :target.
+
+  IDEAS PARA "DESPEDAZAR" ESTE ARCHIVO PARA LOS ALUMNOS:
+  - Bloque CSS 1: estilo de las tarjetas del catálogo (.tarjeta)
+  - Bloque CSS 2: estilo de la alerta de seguridad (.alerta)
+  - Bloque HTML A: catálogo con las 4 tarjetas
+  - Bloque HTML B: una pantalla de herramienta (las otras 3 son iguales)
+  - Los pictogramas son emojis. Se pueden cambiar por imágenes:
+    <img src="horno.png" alt="horno">
+  ============================================================
+-->
+
+<style>
+/* ---------- ESTILO GENERAL ---------- */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #eef6fb;
+  color: #333;
+}
+
+/* ---------- PANTALLAS (truco con :target) ----------
+   Catálogo: capa 2 (se ve al abrir). Herramientas: capa 1 (escondidas).
+   La pantalla elegida con un enlace (:target) sube a la capa 3. */
+.pantalla {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  overflow: auto;
+  padding: 20px;
+  background: #eef6fb;
+  text-align: center;
+  z-index: 1;
+}
+#catalogo { z-index: 2; }
+.pantalla:target { z-index: 3; }
+
+h1 { font-size: 36px; margin: 10px 0 20px; }
+h2 { font-size: 40px; margin: 10px 0; }
+.pictograma { font-size: 110px; }
+
+/* ---------- BLOQUE CSS 1: TARJETAS DEL CATÁLOGO ---------- */
+.catalogo-lista {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.tarjeta {
+  display: block;
+  width: 300px;
+  padding: 20px;
+  background: white;
+  border: 5px solid #4a90c2;
+  border-radius: 20px;
+  text-decoration: none;
+  color: #333;
+  font-size: 28px;
+  font-weight: bold;
+}
+.tarjeta .pictograma { display: block; }
+
+/* ---------- BLOQUE CSS 2: INFORMACIÓN Y ALERTA ---------- */
+.info {
+  max-width: 600px;
+  margin: 15px auto;
+  padding: 15px;
+  background: white;
+  border-radius: 15px;
+  font-size: 26px;
+  line-height: 1.4;
+}
+.info strong { display: block; color: #4a90c2; margin-bottom: 5px; }
+
+.alerta {
+  max-width: 600px;
+  margin: 15px auto 25px;
+  padding: 20px;
+  background: #d62828;      /* fondo rojo */
+  color: white;
+  border: 6px solid #7a0000;
+  border-radius: 15px;
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+/* ---------- BOTÓN VOLVER ---------- */
+.boton {
+  display: block;
+  margin: 15px auto;
+  padding: 22px;
+  max-width: 600px;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #222;
+  background: #c9c9c9;
+  border: 5px solid #888;
+  border-radius: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     BLOQUE HTML A: CATÁLOGO (pantalla principal)
+     ========================================================= -->
+<section class="pantalla" id="catalogo">
+  <h1>🍳 HERRAMIENTAS DE COCINA</h1>
+
+  <div class="catalogo-lista">
+    <a class="tarjeta" href="#balanza"><span class="pictograma">⚖️</span>BALANZA</a>
+    <a class="tarjeta" href="#batidora"><span class="pictograma">🍹</span>BATIDORA / LICUADORA</a>
+    <a class="tarjeta" href="#horno"><span class="pictograma">♨️</span>HORNO</a>
+    <a class="tarjeta" href="#matafuegos"><span class="pictograma">🧯</span>MATAFUEGOS</a>
+  </div>
+
+  <!-- Vuelve a la pantalla de inicio (index.html) -->
+  <a class="boton" href="index.html">🏠 INICIO</a>
+</section>
+
+
+<!-- =========================================================
+     BLOQUE HTML B: PANTALLA DE UNA HERRAMIENTA
+     Tiene botón VOLVER arriba y abajo.
+     Las otras 3 pantallas son iguales: solo cambia el texto.
+     ========================================================= -->
+<section class="pantalla" id="balanza">
+  <a class="boton" href="#catalogo">⬅ VOLVER</a>
+
+  <div class="pictograma">⚖️</div>
+  <h2>BALANZA</h2>
+
+  <div class="info">
+    <strong>¿PARA QUÉ SIRVE?</strong>
+    Sirve para pesar los ingredientes (harina, azúcar, manteca).
+  </div>
+
+  <div class="alerta">⚠️ ¡CUIDADO! No apoyar cosas muy pesadas. No mojar la balanza.</div>
+
+  <a class="boton" href="#catalogo">⬅ VOLVER</a>
+</section>
+
+<section class="pantalla" id="batidora">
+  <a class="boton" href="#catalogo">⬅ VOLVER</a>
+
+  <div class="pictograma">🍹</div>
+  <h2>BATIDORA / LICUADORA</h2>
+
+  <div class="info">
+    <strong>¿PARA QUÉ SIRVE?</strong>
+    Sirve para batir o mezclar rápido huevos, masas y jugos.
+  </div>
+
+  <div class="alerta">⚠️ ¡PELIGRO! No meter los dedos ni cucharas mientras funciona. Usar con el profe.</div>
+
+  <a class="boton" href="#catalogo">⬅ VOLVER</a>
+</section>
+
+<section class="pantalla" id="horno">
+  <a class="boton" href="#catalogo">⬅ VOLVER</a>
+
+  <div class="pictograma">♨️</div>
+  <h2>HORNO</h2>
+
+  <div class="info">
+    <strong>¿PARA QUÉ SIRVE?</strong>
+    Sirve para cocinar al calor: pizzas, budines y pan.
+  </div>
+
+  <div class="alerta">🔥 ¡CALIENTE! Usar con el profe. Usar guantes de cocina.</div>
+
+  <a class="boton" href="#catalogo">⬅ VOLVER</a>
+</section>
+
+<section class="pantalla" id="matafuegos">
+  <a class="boton" href="#catalogo">⬅ VOLVER</a>
+
+  <div class="pictograma">🧯</div>
+  <h2>MATAFUEGOS</h2>
+
+  <div class="info">
+    <strong>¿PARA QUÉ SIRVE?</strong>
+    Sirve para apagar un fuego chiquito.
+  </div>
+
+  <div class="alerta">🚨 ¡EMERGENCIA! Avisar enseguida al profe. No jugar con el matafuegos.</div>
+
+  <a class="boton" href="#catalogo">⬅ VOLVER</a>
+</section>
+
+</body>
+</html>

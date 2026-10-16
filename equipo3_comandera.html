@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comandera - Pedidos del Día</title>
+
+<!--
+  ============================================================
+  EQUIPO 3 - MÓDULO COMANDERA / PEDIDOS DEL DÍA  (rol: MOZO)
+  (solo HTML y CSS)
+  ============================================================
+  CÓMO FUNCIONA EL CONTADOR (sin JavaScript):
+  - Cada producto tiene 7 "botones de opción" escondidos (<input type="radio">),
+    uno por cada cantidad: 0, 1, 2, 3, 4, 5, 6.
+  - Los botones + y - son <label> que "tocan" la opción siguiente o anterior.
+  - Con :checked, CSS muestra SOLO el número de la opción elegida.
+  - El resumen usa la misma idea: muestra "x 3" si la opción 3 está elegida.
+
+  REGLA IMPORTANTE:
+  Los <input> van ANTES de todo el contenido (arriba del <main>).
+  Si se mueven más abajo, el contador deja de funcionar.
+
+  IDEAS PARA "DESPEDAZAR" ESTE ARCHIVO PARA LOS ALUMNOS:
+  - Bloque CSS 1: estilo de los botones + y -
+  - Bloque CSS 2: la regla que muestra la cantidad elegida (:checked)
+  - Bloque HTML A: los botones de opción escondidos
+  - Bloque HTML B: el selector de un producto (los otros 2 son iguales)
+  - Bloque HTML C: el resumen del pedido
+  - Los pictogramas son emojis. Se pueden cambiar por imágenes:
+    <img src="prepizza.png" alt="prepizza">
+  ============================================================
+-->
+
+<style>
+/* ---------- ESTILO GENERAL ---------- */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 15px;
+  font-family: Arial, sans-serif;
+  background: #fdf3e7;
+  color: #333;
+}
+
+h1 { text-align: center; font-size: 34px; margin: 5px 0 5px; }
+.mozo { text-align: center; font-size: 22px; margin: 0 0 20px; color: #a0522d; }
+h2 { text-align: center; font-size: 30px; margin: 0 0 15px; }
+.pictograma { font-size: 70px; }
+
+.app { max-width: 600px; margin: 0 auto; }
+
+/* ---------- TARJETA DE PRODUCTO ---------- */
+.producto {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border: 4px solid #e0c9a0;
+  border-radius: 20px;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+}
+.producto .nombre { font-size: 24px; font-weight: bold; }
+
+/* ---------- BLOQUE CSS 1: BOTONES + Y - ---------- */
+.estado { align-items: center; }
+
+.btn {
+  display: block;
+  width: 70px;
+  height: 70px;
+  line-height: 62px;
+  text-align: center;
+  font-size: 50px;
+  font-weight: bold;
+  color: white;
+  border-radius: 50%;
+  border: 4px solid #333;
+  cursor: pointer;
+}
+.mas   { background: #2e8b57; }
+.menos { background: #d62828; }
+
+.numero {
+  width: 60px;
+  text-align: center;
+  font-size: 44px;
+  font-weight: bold;
+}
+
+/* ---------- BLOQUE CSS 2: MOSTRAR SOLO LA CANTIDAD ELEGIDA ----------
+   Por defecto, todos los números están escondidos. */
+input[type="radio"] { display: none; }
+.estado, .x { display: none; }
+
+/* Cuando una opción está elegida (:checked), se muestra
+   lo que tenga su misma clase dentro de .app */
+
+/* PREPIZZAS */
+#pre0:checked ~ .app .pre0, #pre1:checked ~ .app .pre1,
+#pre2:checked ~ .app .pre2, #pre3:checked ~ .app .pre3,
+#pre4:checked ~ .app .pre4, #pre5:checked ~ .app .pre5,
+#pre6:checked ~ .app .pre6 { display: flex; }
+
+/* BUDINES */
+#bud0:checked ~ .app .bud0, #bud1:checked ~ .app .bud1,
+#bud2:checked ~ .app .bud2, #bud3:checked ~ .app .bud3,
+#bud4:checked ~ .app .bud4, #bud5:checked ~ .app .bud5,
+#bud6:checked ~ .app .bud6 { display: flex; }
+
+/* TORTAS FRITAS */
+#tor0:checked ~ .app .tor0, #tor1:checked ~ .app .tor1,
+#tor2:checked ~ .app .tor2, #tor3:checked ~ .app .tor3,
+#tor4:checked ~ .app .tor4, #tor5:checked ~ .app .tor5,
+#tor6:checked ~ .app .tor6 { display: flex; }
+
+/* ---------- RESUMEN DEL PEDIDO ---------- */
+.resumen {
+  background: #fffbe0;
+  border: 5px dashed #e07b39;
+  border-radius: 20px;
+  padding: 15px;
+  margin-top: 25px;
+}
+.fila {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 5px;
+  font-size: 44px;
+  font-weight: bold;
+}
+.fila .pictograma { font-size: 60px; }
+.x { color: #2e8b57; }
+.x.cero { color: #aaa; }   /* cantidad 0 en gris */
+
+/* ---------- BOTÓN ENVIAR ---------- */
+.enviar {
+  display: block;
+  margin: 20px 0 10px;
+  padding: 25px;
+  text-align: center;
+  font-size: 32px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  background: #e07b39;
+  border: 5px solid #a85520;
+  border-radius: 20px;
+}
+
+/* Botón INICIO (gris, para distinguirlo de ENVIAR) */
+.enviar.inicio {
+  color: #222;
+  background: #c9c9c9;
+  border-color: #888;
+}
+
+/* ---------- PANTALLA "PEDIDO ENVIADO" ---------- */
+.enviado {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #d9f2e1;
+  text-align: center;
+  padding: 40px 20px;
+  z-index: 10;
+}
+.enviado:target { display: block; }
+.enviado .pictograma { font-size: 120px; }
+.enviado p { font-size: 30px; }
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     BLOQUE HTML A: BOTONES DE OPCIÓN ESCONDIDOS
+     (van ANTES del <main>)
+     El primero de cada producto lleva "checked" (empieza en 0).
+     ========================================================= -->
+
+<!-- Prepizzas -->
+<input type="radio" name="prepizza" id="pre0" checked>
+<input type="radio" name="prepizza" id="pre1">
+<input type="radio" name="prepizza" id="pre2">
+<input type="radio" name="prepizza" id="pre3">
+<input type="radio" name="prepizza" id="pre4">
+<input type="radio" name="prepizza" id="pre5">
+<input type="radio" name="prepizza" id="pre6">
+
+<!-- Budines -->
+<input type="radio" name="budin" id="bud0" checked>
+<input type="radio" name="budin" id="bud1">
+<input type="radio" name="budin" id="bud2">
+<input type="radio" name="budin" id="bud3">
+<input type="radio" name="budin" id="bud4">
+<input type="radio" name="budin" id="bud5">
+<input type="radio" name="budin" id="bud6">
+
+<!-- Tortas fritas -->
+<input type="radio" name="tortafrita" id="tor0" checked>
+<input type="radio" name="tortafrita" id="tor1">
+<input type="radio" name="tortafrita" id="tor2">
+<input type="radio" name="tortafrita" id="tor3">
+<input type="radio" name="tortafrita" id="tor4">
+<input type="radio" name="tortafrita" id="tor5">
+<input type="radio" name="tortafrita" id="tor6">
+
+
+<main class="app">
+
+  <h1>📝 PEDIDOS DEL DÍA</h1>
+  <p class="mozo">ROL: MOZO</p>
+
+  <!-- =======================================================
+       BLOQUE HTML B: SELECTOR DE UN PRODUCTO
+       Cada "estado" es un número distinto (0 a 6).
+       - El "−" apunta al número de ABAJO.
+       - El "+" apunta al número de ARRIBA.
+       ======================================================= -->
+
+  <!-- PREPIZZAS -->
+  <div class="producto">
+    <span class="pictograma">🍕</span>
+    <span class="nombre">PREPIZZAS</span>
+
+    <div class="estado pre0"><label class="btn menos" for="pre0">−</label><span class="numero">0</span><label class="btn mas" for="pre1">+</label></div>
+    <div class="estado pre1"><label class="btn menos" for="pre0">−</label><span class="numero">1</span><label class="btn mas" for="pre2">+</label></div>
+    <div class="estado pre2"><label class="btn menos" for="pre1">−</label><span class="numero">2</span><label class="btn mas" for="pre3">+</label></div>
+    <div class="estado pre3"><label class="btn menos" for="pre2">−</label><span class="numero">3</span><label class="btn mas" for="pre4">+</label></div>
+    <div class="estado pre4"><label class="btn menos" for="pre3">−</label><span class="numero">4</span><label class="btn mas" for="pre5">+</label></div>
+    <div class="estado pre5"><label class="btn menos" for="pre4">−</label><span class="numero">5</span><label class="btn mas" for="pre6">+</label></div>
+    <div class="estado pre6"><label class="btn menos" for="pre5">−</label><span class="numero">6</span><label class="btn mas" for="pre6">+</label></div>
+  </div>
+
+  <!-- BUDINES -->
+  <div class="producto">
+    <span class="pictograma">🍰</span>
+    <span class="nombre">BUDINES</span>
+
+    <div class="estado bud0"><label class="btn menos" for="bud0">−</label><span class="numero">0</span><label class="btn mas" for="bud1">+</label></div>
+    <div class="estado bud1"><label class="btn menos" for="bud0">−</label><span class="numero">1</span><label class="btn mas" for="bud2">+</label></div>
+    <div class="estado bud2"><label class="btn menos" for="bud1">−</label><span class="numero">2</span><label class="btn mas" for="bud3">+</label></div>
+    <div class="estado bud3"><label class="btn menos" for="bud2">−</label><span class="numero">3</span><label class="btn mas" for="bud4">+</label></div>
+    <div class="estado bud4"><label class="btn menos" for="bud3">−</label><span class="numero">4</span><label class="btn mas" for="bud5">+</label></div>
+    <div class="estado bud5"><label class="btn menos" for="bud4">−</label><span class="numero">5</span><label class="btn mas" for="bud6">+</label></div>
+    <div class="estado bud6"><label class="btn menos" for="bud5">−</label><span class="numero">6</span><label class="btn mas" for="bud6">+</label></div>
+  </div>
+
+  <!-- TORTAS FRITAS -->
+  <div class="producto">
+    <span class="pictograma">🍩</span>
+    <span class="nombre">TORTAS FRITAS</span>
+
+    <div class="estado tor0"><label class="btn menos" for="tor0">−</label><span class="numero">0</span><label class="btn mas" for="tor1">+</label></div>
+    <div class="estado tor1"><label class="btn menos" for="tor0">−</label><span class="numero">1</span><label class="btn mas" for="tor2">+</label></div>
+    <div class="estado tor2"><label class="btn menos" for="tor1">−</label><span class="numero">2</span><label class="btn mas" for="tor3">+</label></div>
+    <div class="estado tor3"><label class="btn menos" for="tor2">−</label><span class="numero">3</span><label class="btn mas" for="tor4">+</label></div>
+    <div class="estado tor4"><label class="btn menos" for="tor3">−</label><span class="numero">4</span><label class="btn mas" for="tor5">+</label></div>
+    <div class="estado tor5"><label class="btn menos" for="tor4">−</label><span class="numero">5</span><label class="btn mas" for="tor6">+</label></div>
+    <div class="estado tor6"><label class="btn menos" for="tor5">−</label><span class="numero">6</span><label class="btn mas" for="tor6">+</label></div>
+  </div>
+
+
+  <!-- =======================================================
+       BLOQUE HTML C: RESUMEN VISUAL DEL PEDIDO
+       Cada fila muestra el pictograma y la cantidad elegida.
+       ======================================================= -->
+  <div class="resumen">
+    <h2>🧑‍🍳 PEDIDO PARA LA COCINA</h2>
+
+    <div class="fila">
+      <span class="pictograma">🍕</span>
+      <span class="x cero pre0">x 0</span>
+      <span class="x pre1">x 1</span>
+      <span class="x pre2">x 2</span>
+      <span class="x pre3">x 3</span>
+      <span class="x pre4">x 4</span>
+      <span class="x pre5">x 5</span>
+      <span class="x pre6">x 6</span>
+    </div>
+
+    <div class="fila">
+      <span class="pictograma">🍰</span>
+      <span class="x cero bud0">x 0</span>
+      <span class="x bud1">x 1</span>
+      <span class="x bud2">x 2</span>
+      <span class="x bud3">x 3</span>
+      <span class="x bud4">x 4</span>
+      <span class="x bud5">x 5</span>
+      <span class="x bud6">x 6</span>
+    </div>
+
+    <div class="fila">
+      <span class="pictograma">🍩</span>
+      <span class="x cero tor0">x 0</span>
+      <span class="x tor1">x 1</span>
+      <span class="x tor2">x 2</span>
+      <span class="x tor3">x 3</span>
+      <span class="x tor4">x 4</span>
+      <span class="x tor5">x 5</span>
+      <span class="x tor6">x 6</span>
+    </div>
+  </div>
+
+  <a class="enviar" href="#enviado">📤 ENVIAR A COCINA</a>
+
+  <!-- Vuelve a la pantalla de inicio (index.html) -->
+  <a class="enviar inicio" href="index.html">🏠 INICIO</a>
+
+</main>
+
+
+<!-- PANTALLA FINAL (aparece al tocar ENVIAR A COCINA) -->
+<section class="enviado" id="enviado">
+  <div class="pictograma">✅</div>
+  <h2>¡PEDIDO ENVIADO!</h2>
+  <p>La cocina ya lo recibió.</p>
+  <a class="enviar" href="#">SEGUIR PIDIENDO</a>
+</section>
+
+</body>
+</html>

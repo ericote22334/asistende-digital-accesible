@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recetario Visual</title>
+
+<!--
+  ============================================================
+  EQUIPO 1 - MÓDULO RECETARIO VISUAL  (solo HTML y CSS)
+  ============================================================
+  CÓMO FUNCIONA (sin JavaScript):
+  - Cada pantalla es una <section> con un "id".
+  - Un botón es un enlace <a href="#id"> que lleva a otra pantalla.
+  - CSS muestra la pantalla a la que apuntó el enlace usando :target.
+
+  IDEAS PARA "DESPEDAZAR" ESTE ARCHIVO PARA LOS ALUMNOS:
+  - Bloque CSS 1: estilos de .boton (botones gigantes)
+  - Bloque CSS 2: estilos de .ingredientes (lista con pictograma)
+  - Bloque HTML A: pantalla de menú
+  - Bloque HTML B: pantalla de ingredientes (una receta)
+  - Bloque HTML C: pantalla de un paso (copiar y cambiar el texto)
+  - Para los pictogramas se usan emojis. Se pueden cambiar por
+    imágenes:  <img src="harina.png" alt="harina">
+  ============================================================
+-->
+
+<style>
+/* ---------- ESTILO GENERAL ---------- */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #fff8e7;
+  color: #333;
+}
+
+/* ---------- PANTALLAS (truco con :target) ----------
+   Todas las pantallas ocupan toda la ventana y están apiladas.
+   Menú: capa 2 (se ve al abrir).  Otras: capa 1 (escondidas).
+   La pantalla elegida con un enlace (:target): capa 3 (queda arriba). */
+.pantalla {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  overflow: auto;
+  padding: 20px;
+  background: #fff8e7;
+  text-align: center;
+  z-index: 1;
+}
+#menu { z-index: 2; }
+.pantalla:target { z-index: 3; }
+
+/* ---------- TÍTULOS Y TEXTOS ---------- */
+h1 { font-size: 36px; margin: 10px 0 20px; }
+h2 { font-size: 34px; margin: 10px 0; }
+h3 { font-size: 24px; margin: 5px 0 15px; color: #a0522d; }
+
+.pictograma { font-size: 90px; }
+.numero-paso { font-size: 22px; font-weight: bold; color: #a0522d; }
+.accion { font-size: 30px; line-height: 1.4; margin: 15px auto 30px; max-width: 600px; }
+
+/* ---------- BLOQUE CSS 1: BOTONES GIGANTES ---------- */
+.boton {
+  display: block;
+  margin: 15px auto;
+  padding: 25px;
+  max-width: 600px;
+  font-size: 32px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  background: #2e8b57;
+  border-radius: 20px;
+  border: 5px solid #1d5c39;
+}
+.boton.volver { background: #b0b0b0; border-color: #777; color: #222; }
+.boton.receta { background: #e07b39; border-color: #a85520; }
+
+/* ---------- BLOQUE CSS 2: LISTA DE INGREDIENTES ---------- */
+.ingredientes {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto 20px;
+  max-width: 600px;
+}
+.ingredientes li {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 3px solid #e0c9a0;
+  border-radius: 15px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+.ingredientes .pictograma { font-size: 50px; width: 80px; text-align: center; }
+.ingredientes .cantidad { font-size: 26px; font-weight: bold; width: 150px; color: #2e8b57; }
+.ingredientes .nombre { font-size: 26px; font-weight: bold; }
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     BLOQUE HTML A: MENÚ PRINCIPAL
+     ========================================================= -->
+<section class="pantalla" id="menu">
+  <h1>👩‍🍳 MIS RECETAS</h1>
+  <a class="boton receta" href="#prepizza-ing">🍕 PREPIZZAS</a>
+  <a class="boton receta" href="#budin-ing">🍊 BUDÍN DE NARANJA</a>
+  <a class="boton receta" href="#tortafritas-ing">🍩 TORTAFRITAS</a>
+
+  <!-- Vuelve a la pantalla de inicio (index.html) -->
+  <a class="boton volver" href="index.html">🏠 INICIO</a>
+</section>
+
+
+<!-- =========================================================
+     RECETA 1: PREPIZZAS
+     ========================================================= -->
+
+<!-- BLOQUE HTML B: INGREDIENTES -->
+<section class="pantalla" id="prepizza-ing">
+  <h2>🍕 PREPIZZAS</h2>
+  <h3>INGREDIENTES</h3>
+
+  <ul class="ingredientes">
+    <li><span class="pictograma">🌾</span><span class="cantidad">1 KG</span><span class="nombre">HARINA</span></li>
+    <li><span class="pictograma">🫧</span><span class="cantidad">1 SOBRE</span><span class="nombre">LEVADURA</span></li>
+    <li><span class="pictograma">🧂</span><span class="cantidad">1 CUCHARADA</span><span class="nombre">SAL</span></li>
+    <li><span class="pictograma">🫒</span><span class="cantidad">2 CUCHARADAS</span><span class="nombre">ACEITE</span></li>
+    <li><span class="pictograma">💧</span><span class="cantidad">600 ML</span><span class="nombre">AGUA TIBIA</span></li>
+  </ul>
+
+  <a class="boton" href="#prepizza-1">SIGUIENTE PASO</a>
+  <a class="boton volver" href="#menu">VOLVER</a>
+</section>
+
+<!-- BLOQUE HTML C: PASOS (cada paso es igual, solo cambia el texto) -->
+<section class="pantalla" id="prepizza-1">
+  <p class="numero-paso">PASO 1 DE 4</p>
+  <div class="pictograma">🫧</div>
+  <h2>1° FERMENTO</h2>
+  <p class="accion">Mezclá la levadura con un poco de agua tibia. Esperá 10 minutos.</p>
+  <a class="boton" href="#prepizza-2">SIGUIENTE PASO</a>
+  <a class="boton volver" href="#prepizza-ing">VOLVER</a>
+</section>
+
+<section class="pantalla" id="prepizza-2">
+  <p class="numero-paso">PASO 2 DE 4</p>
+  <div class="pictograma">🤲</div>
+  <h2>2° AMASADO</h2>
+  <p class="accion">Poné la harina, la sal, el aceite y el fermento. Amasá 10 minutos.</p>
+  <a class="boton" href="#prepizza-3">SIGUIENTE PASO</a>
+  <a class="boton volver" href="#prepizza-1">VOLVER</a>
+</section>
+
+<section class="pantalla" id="prepizza-3">
+  <p class="numero-paso">PASO 3 DE 4</p>
+  <div class="pictograma">⏰</div>
+  <h2>3° LEUDADO</h2>
+  <p class="accion">Tapá la masa con un paño. Dejala descansar 1 hora.</p>
+  <a class="boton" href="#prepizza-4">SIGUIENTE PASO</a>
+  <a class="boton volver" href="#prepizza-2">VOLVER</a>
+</section>
+
+<section class="pantalla" id="prepizza-4">
+  <p class="numero-paso">PASO 4 DE 4</p>
+  <div class="pictograma">🔥</div>
+  <h2>4° HORNEADO</h2>
+  <p class="accion">Estirá la masa en la placa. Horno fuerte 10 minutos. ¡Con el profe!</p>
+  <a class="boton" href="#menu">¡TERMINÉ!</a>
+  <a class="boton volver" href="#prepizza-3">VOLVER</a>
+</section>
+
+
+<!-- =========================================================
+     RECETA 2: BUDÍN DE NARANJA
+     ========================================================= -->
+
+<section class="pantalla" id="budin-ing">
+  <h2>🍊 BUDÍN DE NARANJA</h2>
+  <h3>INGREDIENTES</h3>
+
+  <ul class="ingredientes">
+    <li><span class="pictograma">🥚</span><span class="cantidad">3</span><span class="nombre">HUEVOS</span></li>
+    <li><span class="pictograma">🍚</span><span class="cantidad">1 TAZA</span><span class="nombre">AZÚCAR</span></li>
+    <li><span class="pictograma">🍊</span><span class="cantidad">1</span><span class="nombre">NARANJA</span></li>
+    <li><span class="pictograma">🫒</span><span class="cantidad">½ TAZA</span><span class="nombre">ACEITE</span></li>
+    <li><span class="pictograma">🌾</span><span class="cantidad">2 TAZAS</span><span class="nombre">HARINA</span></li>
+    <li><span class="pictograma">🫧</span><span class="cantidad">2 CUCHARADITAS</span><span class="nombre">POLVO DE HORNEAR</span></li>
+  </ul>
+
+  <a class="boton" href="#budin-1">SIGUIENTE PASO</a>
+  <a class="boton volver" href="#menu">VOLVER</a>
+</section>
+
+<section class="pantalla" id="budin-1">
+  <p class="numero-paso">PASO 1 DE 4</p>
+  <div class="pictograma">🥚</div>
+  <h2>1° BATIR</h2>
+  <p class="accion">Batí los huevos con el azúcar hasta que quede espumoso.</p>
+  <a class="boton" href="#budin-2">SIGUIENTE PASO</a>
+  <a class="boton volver" href="#budin-ing">VOLVER</a>
+</section>
+
+<section class="pantalla" id="budin-2">
+  <p class="numero-paso">PASO 2 DE 4</p>
+  <div class="pictograma">🍊</div>
+  <h2>2° NARANJA</h2>
+  <p class="accion">Agregá el jugo de la naranja, la ralladura y el aceite. Mezclá.</p>
+  <a class="boton" href="#budin-3">SIGUIENTE PASO</a>
+  <a class="boton volver" href="#budin-1">VOLVER</a>
+</section>
+
+<section class="pantalla" id="budin-3">
+  <p class="numero-paso">PASO 3 DE 4</p>
+  <div class="pictograma">🌾</div>
+  <h2>3° HARINA</h2>
+  <p class="accion">Agregá la harina y el polvo de hornear. Mezclá despacio y poné todo en el molde.</p>
+  <a class="boton" href="#budin-4">SIGUIENTE PASO</a>
+  <a class="boton volver" href="#budin-2">VOLVER</a>
+</section>
+
+<section class="pantalla" id="budin-4">
+  <p class="numero-paso">PASO 4 DE 4</p>
+  <div class="pictograma">🔥</div>
+  <h2>4° HORNEADO</h2>
+  <p class="accion">Horno medio 40 minutos. ¡Con el profe!</p>
+  <a class="boton" href="#menu">¡TERMINÉ!</a>
+  <a class="boton volver" href="#budin-3">VOLVER</a>
+</section>
+
+
+<!-- =========================================================
+     RECETA 3: TORTAFRITAS
+     ========================================================= -->
+
+<section class="pantalla" id="tortafritas-ing">
+  <h2>🍩 TORTAFRITAS</h2>
+  <h3>INGREDIENTES</h3>
+
+  <ul class="ingredientes">
+    <li><span class="pictograma">🌾</span><span class="cantidad">500 G</span><span class="nombre">HARINA</span></li>
+    <li><span class="pictograma">🧂</span><span class="cantidad">1 CUCHARADITA</span><span class="nombre">SAL</span></li>
+    <li><span class="pictograma">🧈</span><span class="cantidad">100 G</span><span class="nombre">GRASA</span></li>
+    <li><span class="pictograma">💧</span><span class="cantidad">1 TAZA</span><span class="nombre">AGUA TIBIA</span></li>
+    <li><span class="pictograma">🛢️</span><span class="cantidad">1 LITRO</span><span class="nombre">ACEITE PARA FREÍR</span></li>
+  </ul>
+
+  <a class="boton" href="#tortafritas-1">SIGUIENTE PASO</a>
+  <a class="boton volver" href="#menu">VOLVER</a>
+</section>
+
+<section class="pantalla" id="tortafritas-1">
+  <p class="numero-paso">PASO 1 DE 4</p>
+  <div class="pictograma">🥣</div>
+  <h2>1° MEZCLAR</h2>
+  <p class="accion">Poné la harina y la sal en un bols. Agregá la grasa y el agua tibia.</p>
+  <a class="boton" href="#tortafritas-2">SIGUIENTE PASO</a>
+  <a class="boton volver" href="#tortafritas-ing">VOLVER</a>
+</section>
+
+<section class="pantalla" id="tortafritas-2">
+  <p class="numero-paso">PASO 2 DE 4</p>
+  <div class="pictograma">🤲</div>
+  <h2>2° AMASADO</h2>
+  <p class="accion">Amasá hasta que la masa quede lisa. Dejala descansar 20 minutos.</p>
+  <a class="boton" href="#tortafritas-3">SIGUIENTE PASO</a>
+  <a class="boton volver" href="#tortafritas-1">VOLVER</a>
+</section>
+
+<section class="pantalla" id="tortafritas-3">
+  <p class="numero-paso">PASO 3 DE 4</p>
+  <div class="pictograma">⭕</div>
+  <h2>3° ESTIRAR</h2>
+  <p class="accion">Estirá la masa con el palo de amasar. Cortá círculos y hacé un agujerito.</p>
+  <a class="boton" href="#tortafritas-4">SIGUIENTE PASO</a>
+  <a class="boton volver" href="#tortafritas-2">VOLVER</a>
+</section>
+
+<section class="pantalla" id="tortafritas-4">
+  <p class="numero-paso">PASO 4 DE 4</p>
+  <div class="pictograma">🔥</div>
+  <h2>4° FREÍR</h2>
+  <p class="accion">Freí en aceite caliente hasta que estén doradas. ¡Con el profe!</p>
+  <a class="boton" href="#menu">¡TERMINÉ!</a>
+  <a class="boton volver" href="#tortafritas-3">VOLVER</a>
+</section>
+
+</body>
+</html>
